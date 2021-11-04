@@ -259,6 +259,7 @@ int uv__signal_loop_fork(uv_loop_t* loop);
 /* platform specific */
 uint64_t uv__hrtime(uv_clocktype_t type);
 int uv__kqueue_init(uv_loop_t* loop);
+int uv__epoll_init(uv_loop_t* loop);
 int uv__platform_loop_init(uv_loop_t* loop);
 void uv__platform_loop_delete(uv_loop_t* loop);
 void uv__platform_invalidate_fd(uv_loop_t* loop, int fd);
@@ -347,6 +348,12 @@ int uv__recvmmsg(int fd, struct uv__mmsghdr* mmsg, unsigned int vlen);
 int uv__sendmmsg(int fd, struct uv__mmsghdr* mmsg, unsigned int vlen);
 #else
 #define HAVE_MMSG 0
+#endif
+
+#if defined(__sun)
+#if !defined(_POSIX_VERSION) || _POSIX_VERSION < 200809L
+size_t strnlen(const char* s, size_t maxlen);
+#endif
 #endif
 
 
